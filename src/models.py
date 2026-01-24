@@ -1,20 +1,15 @@
-class Product:
-    """
-    Класс для представления товара в магазине.
+"""Модуль с основными классами для интернет-магазина."""
 
-    Атрибуты:
-        name (str): Название товара
-        description (str): Описание товара
-        price (float): Цена товара
-        quantity (int): Количество товара в наличии
-    """
+
+class Product:
+    """Класс для представления товара в магазине."""
 
     def __init__(
-            self,
-            name: str,
-            description: str,
-            price: float,
-            quantity: int
+        self,
+        name: str,
+        description: str,
+        price: float,
+        quantity: int,
     ) -> None:
         """Инициализирует новый объект Product."""
         self.name = name
@@ -26,20 +21,21 @@ class Product:
 class Category:
     """Класс для представления категории товаров."""
 
-    category_count = 0  # Количество всех категорий
-    product_count = 0  # Количество всех товаров
+    # Атрибуты класса (общие для всех категорий)
+    category_count: int = 0
+    product_count: int = 0
 
     def __init__(
-            self,
-            name: str,
-            description: str,
-            products: list
+        self,
+        name: str,
+        description: str,
+        products: list[Product],
     ) -> None:
         """Инициализирует новый объект Category."""
         self.name = name
         self.description = description
         self.products = products
 
-        # Увеличиваем счетчики при создании новой категории
+        # Увеличиваем счетчики при создании категории
         Category.category_count += 1
         Category.product_count += len(products)

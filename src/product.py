@@ -1,15 +1,20 @@
 """Модуль с классом Product (Товар)."""
 
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from .category import Category
+
 
 class Product:
     """Класс для представления товара в магазине."""
 
     def __init__(
-        self,
-        name: str,
-        description: str,
-        price: float,
-        quantity: int,
+            self,
+            name: str,
+            description: str,
+            price: float,
+            quantity: int,
     ) -> None:
         """Инициализирует новый объект Product."""
         self.name = name
@@ -22,12 +27,11 @@ class Product:
         price_formatted = f"{self.price:.1f}"
         return f"{self.name}, {price_formatted} руб. Остаток: {self.quantity} шт."
 
-    def __add__(self, other: "Product") -> float:
-        """Магический метод для сложения товаров."""
-        if not isinstance(other, Product):
-            raise TypeError("Можно складывать только объекты класса Product")
-
-        return (self.price * self.quantity) + (other.price * other.quantity)
+    def __add__(self, other):
+        """Нельзя складывать товары разных классов."""
+        if type(self) is not type(other):
+            raise TypeError("Нельзя складывать товары разных классов")
+        return self.price * self.quantity + other.price * other.quantity
 
     @classmethod
     def new_product(cls, product_data: dict) -> "Product":

@@ -1,7 +1,8 @@
 """Пакет src содержит основные классы для интернет-магазина."""
 
-from .product import Product
 from .category import Category
+from .lawngrass import LawnGrass
+from .product import Product
+from .smartphone import Smartphone
 
-__all__ = ["Product", "Category"]
-__version__ = "0.2.0"
+__all__ = ['Product', 'Category', 'Smartphone', 'LawnGrass']

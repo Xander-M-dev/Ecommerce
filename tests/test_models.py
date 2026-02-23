@@ -283,7 +283,7 @@ def test_product_inherits_from_base_and_mixin() -> None:
 
 def test_mixin_logging_on_creation(capsys) -> None:
     """Проверка, что при создании продукта печатается лог."""
-    product = Product("Тест", "Описание", 100.0, 5)
+    _ = Product("Тест", "Описание", 100.0, 5)
     captured = capsys.readouterr()
     assert "Создан объект Product с параметрами:" in captured.out
     assert "name='Тест'" in captured.out
@@ -292,14 +292,20 @@ def test_mixin_logging_on_creation(capsys) -> None:
 
 def test_smartphone_logging(capsys) -> None:
     """Проверка логирования для смартфона."""
-    phone = Smartphone("Samsung", "Описание", 200.0, 3, 95.0, "S23", 256, "Black")
+    _ = Smartphone(
+        "Samsung", "Описание", 200.0, 3,
+        95.0, "S23", 256, "Black"
+    )
     captured = capsys.readouterr()
     assert "Создан объект Smartphone с параметрами:" in captured.out
 
 
 def test_lawn_grass_logging(capsys) -> None:
     """Проверка логирования для травы."""
-    grass = LawnGrass("Grass", "Описание", 50.0, 10, "Россия", "7 дней", "Зелёный")
+    _ = LawnGrass(
+        "Grass", "Описание", 50.0, 10,
+        "Россия", "7 дней", "Зелёный"
+    )
     captured = capsys.readouterr()
     assert "Создан объект LawnGrass с параметрами:" in captured.out
 

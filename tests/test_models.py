@@ -1,11 +1,10 @@
 """Модуль с тестами для классов интернет-магазина."""
 
-import pytest
-from src import (
-    BaseProduct, Product, Category, Smartphone, LawnGrass,
-    ProductLogMixin
-)
 from abc import ABC
+
+import pytest
+
+from src import BaseProduct, Category, LawnGrass, Product, ProductLogMixin, Smartphone
 
 
 def test_smartphone_creation() -> None:
@@ -18,7 +17,7 @@ def test_smartphone_creation() -> None:
         efficiency=95.5,
         model="S23 Ultra",
         memory=256,
-        color="Серый"
+        color="Серый",
     )
     assert phone.name == "Samsung S23"
     assert phone.description == "Смартфон"
@@ -39,7 +38,7 @@ def test_lawn_grass_creation() -> None:
         quantity=20,
         country="Россия",
         germination_period="7 дней",
-        color="Зеленый"
+        color="Зеленый",
     )
     assert grass.name == "Газонная трава"
     assert grass.description == "Элитная трава"
@@ -160,7 +159,7 @@ def test_new_product_classmethod() -> None:
         "name": "Ноутбук",
         "description": "Игровой ноутбук",
         "price": 150000.0,
-        "quantity": 3
+        "quantity": 3,
     }
     product = Product.new_product(data)
     assert product.name == "Ноутбук"
@@ -238,12 +237,6 @@ def test_products_getter_uses_str() -> None:
     assert category.products == str(product)
 
 
-def test_product_str_with_zero_quantity() -> None:
-    """Товар с нулевым количеством."""
-    product = Product("Товар", "Описание", 100.0, 0)
-    assert str(product) == "Товар, 100.0 руб. Остаток: 0 шт."
-
-
 def test_product_str_price_format() -> None:
     """Проверка форматирования цены (округляется до одного знака)."""
     product = Product("Товар", "Описание", 99.99, 1)
@@ -299,20 +292,14 @@ def test_mixin_logging_on_creation(capsys) -> None:
 
 def test_smartphone_logging(capsys) -> None:
     """Проверка логирования для смартфона."""
-    phone = Smartphone(
-        "Samsung", "Описание", 200.0, 3,
-        95.0, "S23", 256, "Black"
-    )
+    phone = Smartphone("Samsung", "Описание", 200.0, 3, 95.0, "S23", 256, "Black")
     captured = capsys.readouterr()
     assert "Создан объект Smartphone с параметрами:" in captured.out
 
 
 def test_lawn_grass_logging(capsys) -> None:
     """Проверка логирования для травы."""
-    grass = LawnGrass(
-        "Grass", "Описание", 50.0, 10,
-        "Россия", "7 дней", "Зелёный"
-    )
+    grass = LawnGrass("Grass", "Описание", 50.0, 10, "Россия", "7 дней", "Зелёный")
     captured = capsys.readouterr()
     assert "Создан объект LawnGrass с параметрами:" in captured.out
 
@@ -320,9 +307,48 @@ def test_lawn_grass_logging(capsys) -> None:
 def test_base_product_has_abstract_methods() -> None:
     """Проверка наличия абстрактных методов в BaseProduct."""
     abstract_methods = BaseProduct.__abstractmethods__
-    assert 'price' in abstract_methods
-    assert '__str__' in abstract_methods
-    assert '__add__' in abstract_methods
+    assert "price" in abstract_methods
+    assert "__str__" in abstract_methods
+    assert "__add__" in abstract_methods
+
+
+def test_product_zero_quantity_raises_valueerror() -> None:
+    """Проверка, что создание продукта с quantity=0 вызывает ValueError."""
+    with pytest.raises(
+        ValueError, match="Товар с нулевым количеством не может быть добавлен"
+    ):
+        Product("Test", "Desc", 100.0, 0)
+
+
+def test_category_middle_price_normal() -> None:
+    """Проверка middle_price для категории с товарами."""
+    p1 = Product("P1", "", 100.0, 2)
+    p2 = Product("P2", "", 200.0, 3)
+    category = Category("Cat", "Desc", [p1, p2])
+    assert category.middle_price() == 150.0  # (100+200)/2
+
+
+def test_category_middle_price_empty() -> None:
+    """Проверка middle_price для пустой категории (должен вернуть 0)."""
+    category = Category("Empty", "Desc", [])
+    assert category.middle_price() == 0.0
+
+
+def test_category_middle_price_single_product() -> None:
+    """Проверка для категории с одним товаром."""
+    p = Product("P", "", 300.0, 5)
+    category = Category("Cat", "Desc", [p])
+    assert category.middle_price() == 300.0
+
+
+def test_category_middle_price_after_add_product() -> None:
+    """Проверка, что после добавления товара средняя цена пересчитывается."""
+    p1 = Product("P1", "", 100.0, 2)
+    category = Category("Cat", "Desc", [p1])
+    assert category.middle_price() == 100.0
+    p2 = Product("P2", "", 200.0, 3)
+    category.add_product(p2)
+    assert category.middle_price() == 150.0
 
 
 if __name__ == "__main__":

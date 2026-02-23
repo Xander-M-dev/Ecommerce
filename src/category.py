@@ -25,7 +25,9 @@ class Category:
     def add_product(self, product: Product) -> None:
         """Добавляет товар в категорию. Принимает только объекты Product или его наследников."""
         if not isinstance(product, Product):
-            raise TypeError("Можно добавлять только объекты класса Product или его наследников")
+            raise TypeError(
+                "Можно добавлять только объекты класса Product или его наследников"
+            )
         self.__products.append(product)
         Category.product_count += 1
 
@@ -33,3 +35,11 @@ class Category:
     def products(self) -> str:
         """Возвращает строку со списком товаров в категории."""
         return "\n".join(str(p) for p in self.__products)
+
+    def middle_price(self) -> float:
+        """Возвращает среднюю цену товаров в категории, если категория пуста, возвращает 0."""
+        try:
+            total = sum(product.price for product in self.__products)
+            return total / len(self.__products)
+        except ZeroDivisionError:
+            return 0.0

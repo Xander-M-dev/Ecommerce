@@ -4,7 +4,7 @@ from abc import ABC, abstractmethod
 
 
 class BaseProduct(ABC):
-    """Абстрактный базовый класс для всех продуктов, задаёт обязательные методы и свойства, которые должны быть у каждого товара."""
+    """Абстрактный базовый класс для всех продуктов, задаёт обязательные методы и свойства для каждого товара."""
 
     @property
     @abstractmethod
@@ -24,6 +24,6 @@ class BaseProduct(ABC):
         pass
 
     @abstractmethod
-    def __add__(self, other: 'BaseProduct') -> float:
+    def __add__(self, other: "BaseProduct") -> float:
         """Абстрактный метод сложения продуктов."""
         pass

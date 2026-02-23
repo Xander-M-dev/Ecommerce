@@ -1,4 +1,5 @@
 """Модуль с классом LawnGrass (Газонная трава), наследником Product."""
+
 from .product import Product
 
 
@@ -6,15 +7,15 @@ class Smartphone(Product):
     """Класс для смартфона, наследник Product."""
 
     def __init__(
-            self,
-            name: str,
-            description: str,
-            price: float,
-            quantity: int,
-            efficiency: float,
-            model: str,
-            memory: int,
-            color: str,
+        self,
+        name: str,
+        description: str,
+        price: float,
+        quantity: int,
+        efficiency: float,
+        model: str,
+        memory: int,
+        color: str,
     ) -> None:
         """Инициализация смартфона."""
         super().__init__(name, description, price, quantity)

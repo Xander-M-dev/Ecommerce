@@ -1,8 +1,11 @@
 """Модуль с тестами для классов интернет-магазина."""
 
 import pytest
-
-from src import Category, LawnGrass, Product, Smartphone
+from src import (
+    BaseProduct, Product, Category, Smartphone, LawnGrass,
+    ProductLogMixin
+)
+from abc import ABC
 
 
 def test_smartphone_creation() -> None:
@@ -270,6 +273,56 @@ def test_counters() -> None:
     _ = Category("Кат2", "Описание", [p3])
     assert Category.category_count == 2
     assert Category.product_count == 3
+
+
+def test_base_product_is_abstract() -> None:
+    """Проверка, что BaseProduct является абстрактным классом."""
+    assert issubclass(BaseProduct, ABC)
+    with pytest.raises(TypeError):
+        _ = BaseProduct()
+
+
+def test_product_inherits_from_base_and_mixin() -> None:
+    """Проверка, что Product наследует от BaseProduct и содержит миксин."""
+    assert issubclass(Product, BaseProduct)
+    assert issubclass(Product, ProductLogMixin)
+
+
+def test_mixin_logging_on_creation(capsys) -> None:
+    """Проверка, что при создании продукта печатается лог."""
+    product = Product("Тест", "Описание", 100.0, 5)
+    captured = capsys.readouterr()
+    assert "Создан объект Product с параметрами:" in captured.out
+    assert "name='Тест'" in captured.out
+    assert "price=100.0" in captured.out
+
+
+def test_smartphone_logging(capsys) -> None:
+    """Проверка логирования для смартфона."""
+    phone = Smartphone(
+        "Samsung", "Описание", 200.0, 3,
+        95.0, "S23", 256, "Black"
+    )
+    captured = capsys.readouterr()
+    assert "Создан объект Smartphone с параметрами:" in captured.out
+
+
+def test_lawn_grass_logging(capsys) -> None:
+    """Проверка логирования для травы."""
+    grass = LawnGrass(
+        "Grass", "Описание", 50.0, 10,
+        "Россия", "7 дней", "Зелёный"
+    )
+    captured = capsys.readouterr()
+    assert "Создан объект LawnGrass с параметрами:" in captured.out
+
+
+def test_base_product_has_abstract_methods() -> None:
+    """Проверка наличия абстрактных методов в BaseProduct."""
+    abstract_methods = BaseProduct.__abstractmethods__
+    assert 'price' in abstract_methods
+    assert '__str__' in abstract_methods
+    assert '__add__' in abstract_methods
 
 
 if __name__ == "__main__":

@@ -1,86 +1,84 @@
-"""Основной файл для запуска приложения."""
+"""файл запуска программы."""
 
-from src.models import Category, Product
+from src import Category, LawnGrass, Smartphone
 
+if __name__ == '__main__':
+    smartphone1 = Smartphone("Samsung Galaxy S23 Ultra", "256GB, Серый цвет, 200MP камера", 180000.0, 5, 95.5,
+                             "S23 Ultra", 256, "Серый")
+    smartphone2 = Smartphone("Iphone 15", "512GB, Gray space", 210000.0, 8, 98.2, "15", 512, "Gray space")
+    smartphone3 = Smartphone("Xiaomi Redmi Note 11", "1024GB, Синий", 31000.0, 14, 90.3, "Note 11", 1024, "Синий")
 
-def create_sample_data() -> tuple[list[Product], list[Category]]:
-    """Создает тестовые данные."""
-    # Создаем товары
-    phone = Product("iPhone 15", "Смартфон Apple", 90000.0, 10)
-    laptop = Product("MacBook Pro", "Ноутбук Apple", 150000.0, 5)
-    tablet = Product("iPad Air", "Планшет Apple", 60000.0, 8)
-    tv = Product("Samsung QLED", "Телевизор 4K", 80000.0, 3)
+    print(smartphone1.name)
+    print(smartphone1.description)
+    print(smartphone1.price)
+    print(smartphone1.quantity)
+    print(smartphone1.efficiency)
+    print(smartphone1.model)
+    print(smartphone1.memory)
+    print(smartphone1.color)
 
-    # Создаем категории
-    electronics = Category(
-        "Электроника Apple",
-        "Техника компании Apple",
-        [phone, laptop, tablet],
-    )
+    print(smartphone2.name)
+    print(smartphone2.description)
+    print(smartphone2.price)
+    print(smartphone2.quantity)
+    print(smartphone2.efficiency)
+    print(smartphone2.model)
+    print(smartphone2.memory)
+    print(smartphone2.color)
 
-    tv_category = Category(
-        "Телевизоры",
-        "Современные телевизоры",
-        [tv],
-    )
+    print(smartphone3.name)
+    print(smartphone3.description)
+    print(smartphone3.price)
+    print(smartphone3.quantity)
+    print(smartphone3.efficiency)
+    print(smartphone3.model)
+    print(smartphone3.memory)
+    print(smartphone3.color)
 
-    return [phone, laptop, tablet, tv], [electronics, tv_category]
+    grass1 = LawnGrass("Газонная трава", "Элитная трава для газона", 500.0, 20, "Россия", "7 дней", "Зеленый")
+    grass2 = LawnGrass("Газонная трава 2", "Выносливая трава", 450.0, 15, "США", "5 дней", "Темно-зеленый")
 
+    print(grass1.name)
+    print(grass1.description)
+    print(grass1.price)
+    print(grass1.quantity)
+    print(grass1.country)
+    print(grass1.germination_period)
+    print(grass1.color)
 
-def display_products(products: list[Product]) -> None:
-    """Отображает список товаров."""
-    print("\n" + "=" * 50)
-    print("СПИСОК ВСЕХ ТОВАРОВ:")
-    print("=" * 50)
-    for i, product in enumerate(products, 1):
-        print(f"{i}. {product.name}")
-        print(f"   Описание: {product.description}")
-        print(f"   Цена: {product.price:.2f} руб.")
-        print(f"   В наличии: {product.quantity} шт.")
-        print("-" * 50)
+    print(grass2.name)
+    print(grass2.description)
+    print(grass2.price)
+    print(grass2.quantity)
+    print(grass2.country)
+    print(grass2.germination_period)
+    print(grass2.color)
 
+    smartphone_sum = smartphone1 + smartphone2
+    print(smartphone_sum)
 
-def display_categories(categories: list[Category]) -> None:
-    """Отображает список категорий с товарами."""
-    print("\n" + "=" * 50)
-    print("КАТЕГОРИИ И ТОВАРЫ:")
-    print("=" * 50)
+    grass_sum = grass1 + grass2
+    print(grass_sum)
 
-    for category in categories:
-        print(f"\nКатегория: {category.name}")
-        print(f"Описание: {category.description}")
-        print(f"Товаров в категории: {len(category.products)}")
-        print("Товары:")
+    try:
+        invalid_sum = smartphone1 + grass1
+    except TypeError:
+        print("Возникла ошибка TypeError при попытке сложения")
+    else:
+        print("Не возникла ошибка TypeError при попытке сложения")
 
-        for product in category.products:
-            print(f"  • {product.name} - {product.price:.2f} руб.")
+    category_smartphones = Category("Смартфоны", "Высокотехнологичные смартфоны", [smartphone1, smartphone2])
+    category_grass = Category("Газонная трава", "Различные виды газонной травы", [grass1, grass2])
 
+    category_smartphones.add_product(smartphone3)
 
-def display_statistics() -> None:
-    """Отображает статистику по магазину."""
-    print("\n" + "=" * 50)
-    print("СТАТИСТИКА МАГАЗИНА:")
-    print("=" * 50)
-    print(f"Всего категорий: {Category.category_count}")
-    print(f"Всего товаров: {Category.product_count}")
-    print("=" * 50)
+    print(category_smartphones.products)
 
+    print(Category.product_count)
 
-def main() -> None:
-    """Основная функция приложения."""
-    print("ДОБРО ПОЖАЛОВАТЬ В ИНТЕРНЕТ-МАГАЗИН!")
-    print("=" * 50)
-
-    # Создаем тестовые данные
-    products, categories = create_sample_data()
-
-    # Отображаем информацию
-    display_products(products)
-    display_categories(categories)
-    display_statistics()
-
-    print("\nРабота программы завершена успешно!")
-
-
-if __name__ == "__main__":
-    main()
+    try:
+        category_smartphones.add_product("Not a product")
+    except TypeError:
+        print("Возникла ошибка TypeError при добавлении не продукта")
+    else:
+        print("Не возникла ошибка TypeError при добавлении не продукта")
